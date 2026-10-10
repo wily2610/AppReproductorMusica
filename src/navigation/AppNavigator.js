@@ -6,6 +6,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import NowPlayingScreen from '../screens/NowPlayingScreen';
 import SearchScreen from '../screens/SearchScreen';
+import LibraryScreen from '../screens/LibraryScreen';
+import CreatePlaylistScreen from '../screens/CreatePlaylistScreen';
+import PlaylistSongsScreen from '../screens/PlaylistSongsScreen';
+import PlaylistDetailScreen from '../screens/PlaylistDetailScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -15,6 +19,18 @@ function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="NowPlaying" component={NowPlayingScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function LibraryStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="LibraryScreen" component={LibraryScreen} />
+      <Stack.Screen name="CreatePlaylist" component={CreatePlaylistScreen} />
+      <Stack.Screen name="PlaylistSongs" component={PlaylistSongsScreen} />
+      <Stack.Screen name="PlaylistDetail" component={PlaylistDetailScreen} />
       <Stack.Screen name="NowPlaying" component={NowPlayingScreen} />
     </Stack.Navigator>
   );
@@ -53,7 +69,7 @@ export default function AppNavigator() {
       />
       <Tab.Screen 
         name="Biblioteca" 
-        component={HomeScreen} 
+        component={LibraryStack}
         options={{ tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="library-shelves" color={color} size={size} /> }}
       />
     </Tab.Navigator>

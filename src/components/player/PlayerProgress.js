@@ -1,14 +1,33 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import { ProgressBar, Text } from 'react-native-paper';
+import { useAudioPlayerContext } from '../../context/AudioPlayerContext';
 
 export default function PlayerProgress() {
+  const { currentTime, duration, seekTo } = useAudioPlayerContext();
+  const [barWidth, setBarWidth] = React.useState(0);
+  const progress = duration > 0 ? currentTime / duration : 0;
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${remainingSeconds}`;
+  };
+
   return (
     <View style={styles.container}>
-      <ProgressBar progress={0.3} color="#1DB954" style={styles.bar} />
+      <Pressable
+        onLayout={(event) => setBarWidth(event.nativeEvent.layout.width)}
+        onPress={(event) => {
+          if (duration > 0 && barWidth > 0) {
+            seekTo((event.nativeEvent.locationX / barWidth) * duration);
+          }
+        }}
+      >
+        <ProgressBar progress={progress} color="#1DB954" style={styles.bar} />
+      </Pressable>
       <View style={styles.timeRow}>
-        <Text style={styles.time}>1:37</Text>
-        <Text style={styles.time}>4:21</Text>
+        <Text style={styles.time}>{formatTime(currentTime)}</Text>
+        <Text style={styles.time}>{formatTime(duration)}</Text>
       </View>
     </View>
   );
