@@ -5,6 +5,7 @@ import HomeHeader from '../components/home/HomeHeader';
 import CategoryChips from '../components/home/CategoryChips';
 import SectionHeader from '../components/home/SectionHeader';
 import SongCard from '../components/home/SongCard';
+import { songs } from '../data/songs';
 
 export default function HomeScreen({ navigation }) {
   return (
@@ -17,24 +18,15 @@ export default function HomeScreen({ navigation }) {
 
         <SectionHeader title="Canciones Populares" />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-          <SongCard 
-            image="https://picsum.photos/200" 
-            title="Starboy" 
-            artist="The Weeknd" 
-            onPress={() => navigation.navigate('NowPlaying')} 
-          />
-          <SongCard 
-            image="https://picsum.photos/201" 
-            title="Superman" 
-            artist="Eminem" 
-            onPress={() => navigation.navigate('NowPlaying')} 
-          />
-          <SongCard 
-            image="https://picsum.photos/202" 
-            title="We Don't Talk" 
-            artist="Kyuhyun" 
-            onPress={() => navigation.navigate('NowPlaying')} 
-          />
+          {songs.map((song) => (
+            <SongCard
+              key={song.id}
+              image={song.image}
+              title={song.title}
+              artist={song.artist}
+              onPress={() => navigation.navigate('NowPlaying', { songId: song.id })}
+            />
+          ))}
         </ScrollView>
 
         <SectionHeader title="Nueva Colección" />

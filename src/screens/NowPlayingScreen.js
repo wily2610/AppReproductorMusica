@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Appbar, Text, IconButton, Button } from 'react-native-paper';
 import PlayerProgress from '../components/player/PlayerProgress';
 import PlayerControls from '../components/player/PlayerControls';
+import { songs } from '../data/songs';
+import { useAudioPlayerContext } from '../context/AudioPlayerContext';
 
-export default function NowPlayingScreen({ navigation }) {
+export default function NowPlayingScreen({ navigation, route }) {
+  const { currentSong, playSong } = useAudioPlayerContext();
+  const selectedSong = songs.find((song) => song.id === route.params?.songId) || currentSong || songs[0];
+
+  useEffect(() => {
+    if (selectedSong && currentSong?.id !== selectedSong.id) {
+      playSong(selectedSong);
+    }
+  }, [selectedSong, currentSong, playSong]);
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={{ backgroundColor: '#121212' }}>
         <Appbar.BackAction onPress={() => navigation.goBack()} color="white" />
         <Appbar.Content 
           title="Playing From Album" 
-          subtitle="Starboy" 
+          subtitle={selectedSong.title}
           titleStyle={{ color: 'white', fontSize: 14 }} 
           subtitleStyle={{ color: 'gray' }} 
         />
@@ -19,12 +30,12 @@ export default function NowPlayingScreen({ navigation }) {
       </Appbar.Header>
 
       <View style={styles.content}>
-        <Image source={{ uri: 'https://picsum.photos/300' }} style={styles.albumArt} />
+        <Image source={{ uri: selectedSong.image }} style={styles.albumArt} />
         
         <View style={styles.titleRow}>
           <View>
-            <Text variant="headlineSmall" style={styles.songTitle}>Starboy Remix</Text>
-            <Text variant="bodyLarge" style={styles.artist}>The Weeknd</Text>
+            <Text variant="headlineSmall" style={styles.songTitle}>{selectedSong.title}</Text>
+            <Text variant="bodyLarge" style={styles.artist}>{selectedSong.artist}</Text>
           </View>
           <IconButton icon="heart-outline" size={30} iconColor="white" onPress={() => {}} />
         </View>
